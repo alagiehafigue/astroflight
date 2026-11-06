@@ -1,27 +1,23 @@
 import pygame
-from constants import LINE_WIDTH
-
 
 # Base class for game objects
 class CircleShape(pygame.sprite.Sprite):
-    containers: tuple[pygame.sprite.Group, ...]
+    containers: tuple[pygame.sprite.Group, ...] = ()
 
     def __init__(self, x: float, y: float, radius: float) -> None:
-        # we will be using this later
-        if hasattr(self, "containers"):
+        if hasattr(self, "containers") and self.containers:
             super().__init__(*self.containers)
         else:
             super().__init__()
 
         self.position: pygame.Vector2 = pygame.Vector2(x, y)
-        self.velocity = pygame.Vector2(0, 0)
-        self.radius = radius
+        self.velocity: pygame.Vector2 = pygame.Vector2(0, 0)
+        self.radius: float = radius
 
     def draw(self, screen: pygame.Surface) -> None:
-        # must override
-        pygame.draw.polygon(screen, "white", self.triangle(), LINE_WIDTH)
+        # Generic placeholder: child classes (like Player and Asteroid) must override this
+        pass
 
     def update(self, dt: float) -> None:
-         pass
-    
-        
+        # Generic placeholder: child classes must override this
+        pass

@@ -1,6 +1,14 @@
 from circleshape import CircleShape
 import pygame
-from constants import LINE_WIDTH, ASTEROID_MIN_RADIUS
+from particle import Particle
+from constants import (
+    LINE_WIDTH, 
+    ASTEROID_MIN_RADIUS, 
+    PARTICLE_COUNT,
+    PARTICLE_MAX_SPEED, 
+    PARTICLE_MIN_SPEED, 
+    PARTICLE_LIFETIME
+    )
 import random
 from logger import log_event
 class Asteroid(CircleShape): 
@@ -15,7 +23,18 @@ class Asteroid(CircleShape):
         # Move in a straight line at constant velocity scaled by delta time
         self.position += self.velocity * dt
     
+
+    def explode(self) -> None:
+        # Create shards exploding out radially
+        for _ in range(PARTICLE_COUNT):
+            angle = random.uniform(0, 360)
+            speed = random.uniform(PARTICLE_MIN_SPEED, PARTICLE_MAX_SPEED)
+            velocity = pygame.Vector2(0, 1).rotate(angle) * speed
+            lifetime = random.uniform(PARTICLE_LIFETIME * 0.5, PARTICLE_LIFETIME)
+            Particle(self.position, velocity, lifetime)
+
     def split(self) -> None:
+        self.explode()
         # Immediately destroy this asteroid from all sprite groups
         self.kill()
 
@@ -40,4 +59,5 @@ class Asteroid(CircleShape):
         # Spawn the two new smaller asteroids
         asteroid_a = Asteroid(self.position.x, self.position.y, new_radius)
         asteroid_a.velocity = velocity_a
+    
 
